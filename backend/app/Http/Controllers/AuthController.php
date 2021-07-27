@@ -238,7 +238,7 @@ class AuthController extends Controller
 
         $check->user = auth()->user()->fullname;
         $check->id_user = $id;
-        $check->date = $request->datecheck;
+        $check->datecheck = $request->datecheck;
         $check->start_time = $request->start_time;
 
         $check->save();
@@ -251,11 +251,11 @@ class AuthController extends Controller
 
     public function checkout(Request $request) {
         $id = auth()->user()->id;
-        $date = $request->datecheck;
+        $datecheck = $request->datecheck;
 
         $check = checkUser::where([
             ['id_user', $id],
-            ['date', $date]
+            ['datecheck', $datecheck]
         ])->first();
 
 

@@ -28,7 +28,7 @@ class CreateUsersTable extends Migration
             $table->string('position');
             $table->longText('permission');
             $table->integer('status')->default(1);
-            $table->integer('id_leader');
+            $table->integer('id_leader')->default(1);
             $table->longText('address');
             $table->timestamp('date_of_birth');
             $table->rememberToken();

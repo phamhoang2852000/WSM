@@ -21,7 +21,7 @@ class chenchucvu extends Seeder
             ['name' => 'Trưởng phòng D1', 'id_role' => '2'],
             ['name' => 'Trưởng phòng D2', 'id_role' => '2'],
             ['name' => 'Trưởng phòng D3', 'id_role' => '2'],
-            ['name' => 'Nhân viên chonhs thức', 'id_role' => '3'],
+            ['name' => 'Nhân viên chính thức', 'id_role' => '3'],
             ['name' => 'Thực tập sinh', 'id_role' => '3'],
         ]);
     }

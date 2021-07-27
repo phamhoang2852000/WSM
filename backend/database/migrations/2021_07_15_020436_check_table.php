@@ -17,8 +17,8 @@ class CheckTable extends Migration
             $table->increments('id');
             $table->integer('id_user');
             $table->string('user');
-            $table->time('start_time');
-            $table->time('end_time');
+            $table->time('start_time')->nullable();
+            $table->time('end_time')->nullable();
             $table->date('datecheck');
             $table->timestamps();
         });

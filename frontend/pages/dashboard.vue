@@ -57,13 +57,13 @@ export default {
 
         if(this.result[i].start_time != null) {
           this.calendarOptions.events.push(
-            {title: this.result[i].start_time, date: this.result[i].date},
+            {title: this.result[i].start_time, date: this.result[i].datecheck},
           )
         }
 
         if(this.result[i].end_time != null) {
           this.calendarOptions.events.push(
-            {title: this.result[i].end_time, date: this.result[i].date},
+            {title: this.result[i].end_time, date: this.result[i].datecheck},
           )
         }
 
@@ -100,7 +100,7 @@ export default {
         .then(response => {
           this.calendarOptions.events = [
             ...this.calendarOptions.events,
-            { title: response.data.checkin.start_time, date: response.data.checkin.date },
+            { title: response.data.checkin.start_time, date: response.data.checkin.datecheck },
           ];
         })
         .catch(error => {
@@ -129,7 +129,7 @@ export default {
         .then(response => {
           this.calendarOptions.events = [
             ...this.calendarOptions.events,
-            { title: response.data.checkout.end_time, date: response.data.checkout.date },
+            { title: response.data.checkout.end_time, date: response.data.checkout.datecheck },
           ];
         })
         .catch(error => {

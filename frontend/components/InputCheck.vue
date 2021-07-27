@@ -5,7 +5,7 @@
    <p>{{selected }}</p>
   <div id="permission">
     <div v-for="value in values" :key="value">
-      <input  type="checkbox"  :value="value.id" :id="value.name" v-model="selected">
+      <input @change="myFunction"  type="checkbox"  :value="value.id" :id="value.name" v-model="selected" >
       <label :for="value.name" >{{value.name}}</label><br>
       <br>
     </div>
@@ -26,9 +26,11 @@ export default {
     }
   },
   methods: {
-    change(event) {
-      this.selected.push(event.target.value);
-      console.log(event.target.value);
+    myFunction(event) {
+      // this.selected.push(event.target.value);
+      // console.log(this.selected);
+      this.$emit('change', this.selected);
+
     },
 
   }

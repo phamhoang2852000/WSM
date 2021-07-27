@@ -32,6 +32,12 @@
                 <td>Ngày sinh</td>
                 <td>{{ user.date_of_birth }}</td>
               </tr>
+              <tr>
+                <td>Các quyền được hưởng</td>
+                <td>
+
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>

@@ -101,8 +101,8 @@
       <div id="sidebar" class="nav-collapse"  v-if="show"  name="fade">
           <div class="leftside-navigation">
             <span v-if="user"></span>
-            <ul class="sidebar-menu" style="margin-top: 50px">
-              <li class="sub-menu">
+              <ul class="sidebar-menu" style="margin-top: 50px">
+                <li class="sub-menu">
                     <a href="/dashboard">
                         <i class="fa fa-home"></i>
                         <span>Trang chủ</span>
@@ -195,9 +195,6 @@ export default {
     axios.get('http://localhost:81/api/division').then(response => {
       this.divisions = response.data;
     })
-    // showUser(index) {
-    //   this.$router.push('/listUser/'+ (index+1));
-    // }
   },
 
   methods: {
@@ -257,7 +254,7 @@ a{
 
 #sidebar {
     width:230px;
-    height:525px;
+    height:527px;
     position:fixed;
     opacity: 1;
     background:#2A3F54;
@@ -267,6 +264,10 @@ a{
     transition:all .3s ease-in-out;
     overflow-x: hidden;
     overflow-y: auto;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
 }
 #sidebar.show{
   width: 100px;

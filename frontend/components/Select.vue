@@ -3,6 +3,7 @@
   <label for="inputDivision" class="form-label"> {{this.title}}</label>
 
   <select  @change="myFunction" class="form-control " :id="this.data">
+    <option disabled value=""> {{this.title}}</option>
     <option v-for="value in values" v-bind:key="value.id" :value="value.id" :name="value.id">
         {{ value.name }}
     </option>
@@ -30,7 +31,7 @@ export default {
   methods: {
     myFunction(event) {
       this.selected = event.target.value;
-      // console.log(this.selected);
+      console.log(this.selected);
       this.$emit('change', this.selected);
     },
 

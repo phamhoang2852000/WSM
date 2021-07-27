@@ -16,12 +16,12 @@ class RequestTable extends Migration
         Schema::create('request', function (Blueprint $table) {
             $table->id();
             $table->string('id_user');  // người gửi yêu cầu
-            $table->string('id_approve');   //người phê duyệt
-            $table->integer('id_requesttype');
-            $table->integer('tinh_trang');
+            $table->string('id_approve')->default('0');   //người phê duyệt
+            $table->string('id_requesttype');
+            $table->integer('tinh_trang')->default(0);
             $table->longText('description');
-            $table->timestamp('time_under');
-            $table->timestamp('time_on');
+            $table->time('time_under');
+            $table->time('time_on');
             $table->timestamps();
         });
     }

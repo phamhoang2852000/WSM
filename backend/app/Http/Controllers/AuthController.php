@@ -18,6 +18,7 @@ use App\Models\RequestUser;
 use App\Models\RequestType;
 use App\Models\postion;
 use App\Models\division;
+use App\Models\checkUser;
 class AuthController extends Controller
 {
     /**
@@ -52,50 +53,43 @@ class AuthController extends Controller
         return $this->createNewToken($token);
     }
 
-    public function forgot(Request $request) {
-       $request->validate([
-            'email' => 'required|email'
-       ]);
-
-       $user = User::where('email', $request->email)->first();
-       if(!$user) {
-           return response()->json(['error' => 'Khong thay email'], 401);
-       }
-       else {
-        return response()->json($user);
-       }
+    public function firstlogin(Request $request) {
+        $id = auth()->user()->id;
+        $user = User::find($id);
 
 
-    }
-
-    public function reset() {
-        $validator = Validator::make($request->all(), [
-            'password' => 'required|string|confirmed|min:6',
-            'confirm_password' => 'required| min:6'
-        ]);
-
-        if($validator->fails()){
-            return response()->json($validator->errors()->toJson(), 400);
+        if($request->newpassword != '') {
+            $user->password = Hash::make($request->newpassword);
         }
 
-        $user = User::create(array_merge(
-                    $validator->validated(),
-                    ['password' => Hash::make($request->password)]
-                ));
+        $user->firstlogin = 1;
+
+        $user->save();
 
         return response()->json([
-            'message' => 'User successfully registered',
-            'user' => $user
-        ], 201);
+            'user' => $user,
+            'message' => 'Đặt lại mật khẩu thành công'
+        ]);
     }
+
+
+
     /**
      * Register a User.
      *
      * @return \Illuminate\Http\JsonResponse
      */
 
-    public function register(RegisterRequest $request) {
+    public function register(RegisterRequest  $request) {
 
+        $json_permission = "";
+        $array_permission = array();
+
+        $permission = $request->permission;
+        foreach($permission as $per) {
+            $array_permission[] = $per;
+        }
+        $json_permission = json_encode($array_permission, JSON_FORCE_OBJECT);
 
         $user = new User;
         $user->email = $request->email;
@@ -103,13 +97,12 @@ class AuthController extends Controller
         $user->address = $request->address;
         $user->password = Hash::make($request->password);
         $user->phonenumber = $request->phonenumber;
-        // $user->division = division::where('id',$request->division)->first()->name;
         $user->division = $request->division;
         $user->position = postion::where('id',$request->position)->first()->name;
         $user->sex = (int)$request->sex;
         // $user->id_leader = (int)$request->id_leader;
         $user->date_of_birth = $request->date_of_birth;
-        // $user->permission = $request->permission;
+        $user->permission = $json_permission;
         $user->save();
 
         return response()->json($user);
@@ -144,7 +137,8 @@ class AuthController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function userProfile() {
-        return response()->json(auth()->user());
+        // $permission = json_decode(auth()->user()->permission, true);
+        return response()->json(auth()->user(), );
 
     }
 
@@ -173,29 +167,8 @@ class AuthController extends Controller
         $id = auth()->user()->id;
         $user = User::find($id);
         $avatarName = "";
-        $random = Str::random(5);
+        // $random = Str::random(5);
 
-        // if (request()->hasFile('avatar')){
-        //     $file = $request->file('avatar');
-        //     var_dump($file);
-        //     $exten = $file->getClientOriginalExtension();
-        //     if($exten != 'jpg' && $exten != 'png' && $exten !='jpeg' && $exten != 'JPG' && $exten != 'PNG' && $exten !='JPEG' )
-        //         return response()->json(['message' => 'Đây không phải file ảnh']);
-        //     $Hinh = "avatar-" . Str::random(5) . "-" . $file->getClientOriginalName();
-        //     while (file_exists('../../../../frontend/static/image/'.$Hinh)) {
-        //          $Hinh = "avatar-" . $random . "-" . $file->getClientOriginalName();
-        //     }
-        //     if(file_exists($Hinh))
-        //        unlink($Hinh);
-
-        //     $file->move('../../../../frontend/static/image/',$Hinh);
-        //     // $user->avatar = $Hinh;
-        //     $json_img =  json_encode($Hinh, JSON_FORCE_OBJECT);
-        // }
-        // else {
-        //     $arr_images = "no_avatar.jpg";
-        //     $json_img = json_encode($arr_images, JSON_FORCE_OBJECT);
-        //  }
         if($request->hasFile('avatar')) {
             $avatar = request()->file('avatar');
             var_dump($avatar);
@@ -257,6 +230,51 @@ class AuthController extends Controller
         ])->get();
 
         return $unacceptRequest;
+    }
+
+    public function checkin(Request $request) {
+        $id = auth()->user()->id;
+        $check = new checkUser;
+
+        $check->user = auth()->user()->fullname;
+        $check->id_user = $id;
+        $check->date = $request->datecheck;
+        $check->start_time = $request->start_time;
+
+        $check->save();
+
+        return response()->json([
+            'message' => 'Checkin thành công',
+            'checkin' => $check
+        ]);
+    }
+
+    public function checkout(Request $request) {
+        $id = auth()->user()->id;
+        $date = $request->datecheck;
+
+        $check = checkUser::where([
+            ['id_user', $id],
+            ['date', $date]
+        ])->first();
+
+
+        $check->end_time = $request->end_time;
+
+        $check->save();
+
+        return response()->json([
+            'message' => 'Checkout thành công',
+            'checkout' => $check
+        ]);
+    }
+
+    public function showcheck(Request $request) {
+        $check = checkUser::where('id_user', auth()->user()->id)->get();
+
+        return response()->json([
+            'check' => $check
+        ]);
     }
 
 }

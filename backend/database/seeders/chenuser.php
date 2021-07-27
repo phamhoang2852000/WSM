@@ -22,7 +22,7 @@ class chenuser extends Seeder
             'avatar' => '',
             'role' => 1,
             'division' => 1,
-            'chuc_vu' => 8,
+            'position' => 'Thực tập sinh',
             'phonenumber' => '354368934543',
             'status' => 1,
             'id_leader' => 2,

@@ -36,7 +36,7 @@ const axios = require('axios');
                     password: ''
                 },
                 errors: {},
-
+                firstlogin: ''
             }
         },
 
@@ -45,7 +45,13 @@ const axios = require('axios');
             axios.post('http://localhost:81/api/auth/login', this.user)
             .then(response => {
               localStorage.setItem('token', response.data.token);
-              this.$router.push({name: 'dashboard'});
+              this.firstlogin = response.data.user.firstlogin;
+              if(this.firstlogin == 0) {
+                this.$router.push('/firstlogin');
+              }
+              else {
+                this.$router.push({name: 'dashboard'});
+              }
             })
             .catch(error => {
               this.errors = error.response.data.errors;

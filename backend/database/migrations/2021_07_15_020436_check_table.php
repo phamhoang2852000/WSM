@@ -14,9 +14,12 @@ class CheckTable extends Migration
     public function up()
     {
         Schema::create('check', function (Blueprint $table) {
-            $table->id();
-            $table->timestamp('start_time');
-            $table->timestamp('end_time');
+            $table->increments('id');
+            $table->integer('id_user');
+            $table->string('user');
+            $table->time('start_time');
+            $table->time('end_time');
+            $table->date('datecheck');
             $table->timestamps();
         });
     }

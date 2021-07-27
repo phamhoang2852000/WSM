@@ -39,6 +39,10 @@ Route::group([
     Route::get('/acceptRequest', [AuthController::class, 'acceptRequest']);
     Route::get('/awitRequest', [AuthController::class, 'awitRequest']);
     Route::get('/unacceptRequest', [AuthController::class, 'unacceptRequest']);
+    Route::post('/firstlogin', [AuthController::class, 'firstlogin']);
+    Route::post('/checkin', [AuthController::class, 'checkin']);
+    Route::post('/checkout', [AuthController::class, 'checkout']);
+    Route::get('/showcheck',  [AuthController::class, 'showcheck']);
 });
 Route::post('/reset-password', [ResetPasswordController::class, 'sendMail']);
 Route::post('/reset-password/{token}', [ResetPasswordController::class, 'resetPassword']);

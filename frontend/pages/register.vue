@@ -57,7 +57,8 @@
                         <InputCheck
                           :values="permissions"
                           :title="'Các quyền lựa chọn'"
-
+                          v-model="permission"
+                          @change="updatepermission"
                         />
                     </div>
                     <div class="col-md-6" style="margin-top:20px">
@@ -116,6 +117,7 @@ export default {
       phonenumber: '',
       division: '',
       position: '',
+      permission: [],
       errors: [],
     }
   },
@@ -140,8 +142,15 @@ export default {
       this.division = value_from_child;
 
     },
+
     updatepostion(value_from_child){
        this.position = value_from_child;
+    },
+
+    updatepermission(value_from_child) {
+      this.permission = value_from_child;
+      // console.log(this.permission);
+      console.log(this.permission);
     },
     register() {
       console.log(this.division)
@@ -154,7 +163,8 @@ export default {
         address: this.address,
         phonenumber: this.phonenumber,
         division: this.division,
-        position: this.position
+        position: this.position,
+        permission: this.permission
       })
       .then(response => {
         // this.user = {}

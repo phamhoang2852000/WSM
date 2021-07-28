@@ -102,17 +102,11 @@
       <div id="sidebar" class="nav-collapse"  v-if="show"  name="fade">
           <div class="leftside-navigation">
             <span v-if="user"></span>
-              <ul class="sidebar-menu" style="margin-top: 50px">
+            <ul class="sidebar-menu" style="margin-top: 50px">
                 <li class="sub-menu">
                     <a href="/dashboard">
                         <i class="fa fa-home"></i>
                         <span>Trang chủ</span>
-                    </a>
-                </li>
-                <li class="sub-menu">
-                    <a href="/register">
-                        <i class="fa fa-user-plus"></i>
-                        <span>Tạo tài khoản mới</span>
                     </a>
                 </li>
                 <li class="sub-menu">
@@ -131,12 +125,23 @@
                     <a class="dropdown-sub" href="/addRequest"><i class="fa fa-plus"></i><span>Tạo yêu cầu mới</span></a>
                   </ul>
                 </li>
+                <li class="sub-menu" v-for="permission in permissionUser" v-bind:key="permission">
+                  <a style="cursor:pointer; color:white" @click="showpermission(permission)" ><span>{{permissions[permission-1].name}}</span></a>
+                </li>
+                <!-- <li class="sub-menu">
+                    <a href="/register">
+                        <i class="fa fa-user-plus"></i>
+                        <span>Tạo tài khoản mới</span>
+                    </a>
+                </li>
+
                 <li class="sub-menu">
                     <a href="/listrequest">
                         <i class="fa fa-pencil-square-o"></i>
                         <span>Phê duyệt yêu cầu</span>
                     </a>
                 </li>
+
                 <li class="sub-menu">
                     <a @click="check = !check"  style="color:white; cursor:pointer">
                         <i class="fa fa-list-alt"></i>
@@ -167,8 +172,9 @@
                     <a class="dropdown-sub" href="/addObject/addposition"><span>Thêm chức vụ mới</span></a>
                     <a class="dropdown-sub" href="/addObject/addpermission"><span>Thêm quyền lợi</span></a>
                   </ul>
-                </li>
+                </li> -->
             </ul>
+
         </div>
       </div>
     </aside>
@@ -197,7 +203,9 @@ export default {
       check: false,
       time: false,
       add: false,
-       divisions: [],
+      divisions: [],
+      permissionUser: [],
+      permissions: []
     }
   },
 
@@ -210,7 +218,7 @@ export default {
     })
     .then(response => {
       this.user = response.data.user;
-
+      this.permissionUser = response.data.permission;
     })
     .catch(error => {
       console.log(error.response.data);
@@ -218,6 +226,11 @@ export default {
 
     axios.get('http://localhost:81/api/division').then(response => {
       this.divisions = response.data;
+    }),
+
+    axios.get('http://localhost:81/api/permission').then(response => {
+      this.permissions = response.data;
+
     })
   },
 
@@ -234,6 +247,10 @@ export default {
 
     showtimeUser(division) {
       this.$router.push('/listtimeworkUser/'+ (division.id));
+    },
+
+    showpermission(permission) {
+      this.$router.push(this.permissions[permission-1].path);
     }
   }
 

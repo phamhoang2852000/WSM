@@ -13,6 +13,11 @@
                         <input v-model="permissionName" type="text"  name="division" class="form-control" id="inputFullname">
                     </div>
 
+                    <div class="col-md-12 form-group" style="margin-top:20px">
+                        <label for="inputFullname" class="form-lable">Đường dẫn tới page</label>
+                        <input v-model="path" type="text"  name="path" class="form-control" id="inputFullname">
+                    </div>
+
                     <div class="col-12">
                         <button type="submit" class="btn btn-primary">Add Permission</button>
                     </div>
@@ -39,6 +44,7 @@ export default {
   data() {
     return {
       permissionName: '',
+      path: '',
       success: ''
     }
   },
@@ -46,7 +52,8 @@ export default {
   methods: {
     addpermission() {
       axios.post('http://localhost:81/api/add-permission',{
-        permissionName: this.permissionName
+        permissionName: this.permissionName,
+        path: this.path
       })
       .then(response => {
         this.success = response.data.message;

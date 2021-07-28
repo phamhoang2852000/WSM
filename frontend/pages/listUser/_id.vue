@@ -26,8 +26,6 @@
               <tr v-for="(list, index) in listUser" :value="list.id" v-bind:key="list.id" >
                 <th>{{index + 1}}</th>
                 <th>{{list.fullname}}</th>
-                <!-- <th v-if="list.sex==1">Nam</th>
-                <th v-else="list.sex==2">Nữ</th> -->
                 <th>
                   <span v-if="list.sex==1">Nam</span>
                   <span v-else>Nữ</span>
@@ -93,6 +91,7 @@ table, th, tr, td{
 table{
     border-collapse:collapse;
 }
+
 .container {
   color: black;
   margin-top:20px;

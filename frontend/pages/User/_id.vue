@@ -44,7 +44,7 @@
                       <tr>
                         <td>Các quyền </td>
                         <td>
-                          <span v-for="per in permissionUser" :key="per" style="text-align:left">- {{permissions[per].name}}. <br></span>
+                          <span v-for="per in permissionUser" :key="per" style="text-align:left">- {{permissions[per-1].name}}. <br></span>
                         </td>
                       </tr>
                     </tbody>
@@ -83,7 +83,7 @@ export default {
       this.account = response.data.user;
       this.divisionName = response.data.division;
       this.permissionUser = response.data.permission;
-      console.log(this.account.id);
+      console.log(this.permissionUser);
 
     }),
 

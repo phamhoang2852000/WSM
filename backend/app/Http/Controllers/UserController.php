@@ -111,7 +111,7 @@ class UserController extends Controller
         $permission = new permission;
 
         $permission->name = $request->permissionName;
-
+        $permission->path = $request->path;
         $permission->save();
 
         return response()->json([

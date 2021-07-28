@@ -35,7 +35,7 @@
               <tr>
                 <td>Các quyền được hưởng</td>
                 <td>
-                  <span v-for="per in permissionUser" :key="per" style="text-align:center">- {{permissions[per].name}}. <br></span>
+                  <span v-for="per in permissionUser" :key="per" style="text-align:center">- {{permissions[per-1].name}}. <br></span>
                 </td>
               </tr>
             </tbody>

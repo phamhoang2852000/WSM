@@ -1,6 +1,6 @@
 <template>
 <div id="calendar">
-  <button @click="isCheck = !isCheck,check()" class="btn btn-success"><i class="fa fa-sign-in" style="margin-right: 10px"></i>
+  <button v-if="hidden" @click="isCheck = !isCheck,check()" class="btn btn-success"><i class="fa fa-sign-in" style="margin-right: 10px"></i>
     <span v-if="isCheck == true">Check in</span>
     <span v-else>Check out</span>
   </button>
@@ -39,11 +39,19 @@ export default {
       start_time: '',
       end_time: '',
       datecheck: '',
-      result: []
+      result: [],
+      hidden: true
     }
   },
 
   mounted() {
+    var today = new Date();
+        if(today.getMonth()+1<10) {
+          var date = today.getFullYear()+'-0'+(today.getMonth()+1)+'-'+today.getDate();
+        }
+        else {
+          var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+        }
     axios.get('http://localhost:81/api/auth/showcheck', {
       headers: {
             'Authorization': 'Bearer ' + localStorage.getItem('token')
@@ -52,8 +60,15 @@ export default {
     .then(response => {
 
       this.result = response.data.check;
-
        for(let i = 0; i<this.result.length; i++) {
+        if(this.result[i].datecheck == date && this.result[i].end_time == null) {
+          this.isCheck = false;
+        }
+
+        if(this.result[i].datecheck == date && this.result[i].end_time != null && this.result[i].start_time != null) {
+          this.hidden = false;
+        }
+
 
         if(this.result[i].start_time != null) {
           this.calendarOptions.events.push(
@@ -78,63 +93,74 @@ export default {
   methods: {
 
     check() {
-      if(this.isCheck == false) {
-          var today = new Date();
-          if(today.getMonth()+1<10) {
-            this.datecheck = today.getFullYear()+'-0'+(today.getMonth()+1)+'-'+today.getDate();
-          }
-          else {
-            this.datecheck = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-          }
-          let time = today.getHours() + ":" + today.getMinutes();
-          this.start_time = time;
-          axios.post('http://localhost:81/api/auth/checkin', {
-            datecheck: this.datecheck,
-            start_time: this.start_time,
-        },
-        {
-           headers: {
-              'Authorization': 'Bearer ' + localStorage.getItem('token')
-            }
-        })
-        .then(response => {
-          this.calendarOptions.events = [
-            ...this.calendarOptions.events,
-            { title: response.data.checkin.start_time, date: response.data.checkin.datecheck },
-          ];
-        })
-        .catch(error => {
-
-        })
-      }
-      else {
-        var today = new Date();
+      var today = new Date();
         if(today.getMonth()+1<10) {
             this.datecheck = today.getFullYear()+'-0'+(today.getMonth()+1)+'-'+today.getDate();
         }
         else {
           this.datecheck = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
         }
-        let time = today.getHours() + ":" + today.getMinutes();
-        this.end_time = time;
+      if(this.isCheck == false) {
+          // var today = new Date();
+          // if(today.getMonth()+1<10) {
+          //   this.datecheck = today.getFullYear()+'-0'+(today.getMonth()+1)+'-'+today.getDate();
+          // }
+          // else {
+          //   this.datecheck = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+          // }
+          let time = today.getHours() + ":" + today.getMinutes();
+          this.start_time = time;
+
+          axios.post('http://localhost:81/api/auth/checkin', {
+            datecheck: this.datecheck,
+            start_time: this.start_time,
+          },
+          {
+            headers: {
+              'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+          })
+          .then(response => {
+
+            this.calendarOptions.events = [
+              ...this.calendarOptions.events,
+              { title: response.data.checkin.start_time, date: response.data.checkin.datecheck },
+            ];
+          })
+          .catch(error => {
+
+          })
+
+      }
+      else {
+          // var today = new Date();
+          // if(today.getMonth()+1<10) {
+          //     this.datecheck = today.getFullYear()+'-0'+(today.getMonth()+1)+'-'+today.getDate();
+          // }
+          // else {
+          //   this.datecheck = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+          // }
+          let time = today.getHours() + ":" + today.getMinutes();
+          this.end_time = time;
           axios.post('http://localhost:81/api/auth/checkout', {
             datecheck: this.datecheck,
             end_time: this.end_time,
-        },
-        {
+          },
+          {
            headers: {
               'Authorization': 'Bearer ' + localStorage.getItem('token')
-            }
-        })
-        .then(response => {
-          this.calendarOptions.events = [
-            ...this.calendarOptions.events,
-            { title: response.data.checkout.end_time, date: response.data.checkout.datecheck },
-          ];
-        })
-        .catch(error => {
+              }
+          })
+          .then(response => {
+            this.hidden = false;
+            this.calendarOptions.events = [
+              ...this.calendarOptions.events,
+              { title: response.data.checkout.end_time, date: response.data.checkout.datecheck },
+            ];
+          })
+          .catch(error => {
 
-        })
+          })
       }
 
     },

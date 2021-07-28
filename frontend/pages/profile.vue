@@ -7,7 +7,7 @@
     <div class="card-body">
       <a href="/updateProfile" class="btn btn-success" style="background-color:white; border:1px solid black; width:50px; height:50px; margin-left:20px"><i style="font-size: 25px; text-align:center; color:black" class="fa fa-pencil"></i></a>
         <div class="space80"></div>
-        <div class="table-responsive col-md-6" style="margin-top:30px">
+        <div class="table-responsive " style="margin-top:30px">
           <h4>Thông tin nhân viên</h4>
           <table class="table">
             <tbody>
@@ -35,7 +35,7 @@
               <tr>
                 <td>Các quyền được hưởng</td>
                 <td>
-
+                  <span v-for="per in permissionUser" :key="per" style="text-align:center">- {{permissions[per].name}}. <br></span>
                 </td>
               </tr>
             </tbody>
@@ -53,6 +53,8 @@ export default {
   data() {
     return {
       user: {},
+      permissionUser: [],
+      permissions: [],
     }
   },
 
@@ -64,12 +66,18 @@ export default {
       }
     })
     .then(response => {
-      this.user = response.data;
+      this.user = response.data.user;
+      this.permissionUser = response.data.permission;
       console.log(response.data);
       //  token: this.$router.params.token;
     })
     .catch(error => {
       console.log(error.response.data);
+    }),
+
+    axios.get('http://localhost:81/api/permission').then(response => {
+      this.permissions = response.data;
+
     })
   },
 
@@ -84,5 +92,7 @@ table, th, tr, td{
 /* table{
     border-collapse:collapse;
 } */
-
+.table {
+  width: 550px;
+}
 </style>

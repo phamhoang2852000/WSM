@@ -49,7 +49,8 @@
                         <InputCheck
                           :values="permissions"
                           :title="'Các quyền lựa chọn'"
-
+                          v-model="permission"
+                          @change="updatepermission"
                         />
                     </div>
                     <div class="col-md-6" style="margin-top:20px">
@@ -102,13 +103,15 @@ export default {
       postions: [],
       permissions: [],
       success: '',
+
       fullname: '',
       email: '',
       password: '',
       phonenumber: '',
       address: '',
       position: '',
-      division: ''
+      division: '',
+      permission: [],
 
     }
   },
@@ -147,9 +150,17 @@ export default {
       this.division = value_from_child;
 
     },
+
     updatepostion(value_from_child){
        this.position = value_from_child;
     },
+
+    updatepermission(value_from_child) {
+      this.permission = value_from_child;
+      // console.log(this.permission);
+      console.log(this.permission);
+    },
+
     updateUser() {
       axios.post('http://localhost:81/api/updateUser/' + this.id, {
         fullname:  this.fullname,
@@ -158,7 +169,8 @@ export default {
         address: this.address,
         phonenumber: this.phonenumber,
         division: this.division,
-        position: this.position
+        position: this.position,
+        permission: this.permission
       })
       .then(response => {
         this.success = response.data.message;

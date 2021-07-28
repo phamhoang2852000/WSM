@@ -43,6 +43,7 @@ Route::group([
     Route::post('/checkin', [AuthController::class, 'checkin']);
     Route::post('/checkout', [AuthController::class, 'checkout']);
     Route::get('/showcheck',  [AuthController::class, 'showcheck']);
+    Route::get('/timework',  [AuthController::class, 'timework']);
 });
 Route::post('/reset-password', [ResetPasswordController::class, 'sendMail']);
 Route::post('/reset-password/{token}', [ResetPasswordController::class, 'resetPassword']);
@@ -60,3 +61,9 @@ Route::get('/list-user/{id_division}', [UserController::class, 'listUser']);
 Route::get('/profileAccount/{idUser}', [UserController::class, 'profileAccount']);
 Route::get('/deleteUser/{idUser}', [UserController::class, 'deleteUser']);
 Route::post('updateUser/{idUser}', [UserController::class, 'updateUser']);
+
+Route::get('/timework-user/{id_division}', [UserController::class, 'timeworkUser']);
+
+Route::post('/add-division', [UserController::class, 'addDivision']);
+Route::post('/add-permission', [UserController::class, 'addPermission']);
+Route::post('/add-position', [UserController::class, 'addPosition']);

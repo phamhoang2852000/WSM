@@ -50,12 +50,14 @@
 <script>
 const axios = require('axios')
 import Success from '@/components/message/success';
-import Error from '@/components/message/error'
+import Error from '@/components/message/error';
+import InputCheck from '../components/InputCheck.vue';
 export default {
   layout: 'master',
   components: {
     Success,
-    Error
+    Error,
+    InputCheck
   },
   data() {
     return {
@@ -77,12 +79,12 @@ export default {
       }
     })
     .then(response => {
-      this.user = response.data;
-      this.url = 'image/'+ response.data.avatar;
-      this.fullname = response.data.fullname;
-      this.address = response.data.address;
-      this.phonenumber = response.data.phonenumber;
-      this.avatar = response.data.avatar;
+      this.user = response.data.user;
+      this.url = 'image/'+ response.data.user.avatar;
+      this.fullname = response.data.user.fullname;
+      this.address = response.data.user.address;
+      this.phonenumber = response.data.user.phonenumber;
+      this.avatar = response.data.user.avatar;
 
     })
     .catch(error => {
@@ -94,11 +96,12 @@ export default {
     loadFile(event) {
       this.avatar = event.target.files[0].name;
 
-      // let reader = new FileReader();
-      // reader.readAsDataURL(this.user.avatar);
-      // reader.onload = event => {
-      //   this.imagepreview = event.target.result;
-      // };
+    },
+
+     updatepermission(value_from_child) {
+      this.permission = value_from_child;
+      // console.log(this.permission);
+      console.log(this.permission);
     },
 
     updateUser() {

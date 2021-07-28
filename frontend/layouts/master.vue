@@ -22,6 +22,7 @@
                   <div class="dropdown-menu dropdown-usermenu pull-right" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item"  href="/profile"> Profile</a>
                     <a class="dropdown-item"  href="/updateProfile">Cập nhật Profile</a>
+                    <a class="dropdown-item"  href="/timework">Thời gian làm việc</a>
                     <a class="dropdown-item"  href="javascript:void(0)" @click="logout"><i class="fa fa-sign-out pull-right"></i> Log Out</a>
                   </div>
                 </li>
@@ -143,7 +144,28 @@
                     </a>
                     <ul class="sub" v-show="check" v-for="(division) in divisions" v-bind:key="division.id" :value="division.id">
                     <li><a style="cursor:pointer" @click="showUser(division)" class="dropdown-sub" ><span>{{division.name}}</span></a></li>
+                  </ul>
+                </li>
 
+                <li class="sub-menu">
+                    <a @click="time = !time"  style="color:white; cursor:pointer">
+                        <i class="fa fa-clock-o"></i>
+                        <span>Thời gian làm việc </span>
+                    </a>
+                    <ul class="sub" v-show="time" v-for="(division) in divisions" v-bind:key="division.id" :value="division.id">
+                    <li><a style="cursor:pointer" @click="showtimeUser(division)" class="dropdown-sub" ><span>{{division.name}}</span></a></li>
+                  </ul>
+                </li>
+
+                <li class="sub-menu">
+                  <a @click="add = !add"  style="color:white; cursor:pointer">
+                      <i class="fa fa-plus"></i>
+                      <span>Thêm mới đối tượng</span>
+                  </a>
+                  <ul class="sub" v-show="add">
+                    <a class="dropdown-sub" href="/addObject/adddivision"><span>Thêm phòng ban mới</span></a>
+                    <a class="dropdown-sub" href="/addObject/addposition"><span>Thêm chức vụ mới</span></a>
+                    <a class="dropdown-sub" href="/addObject/addpermission"><span>Thêm quyền lợi</span></a>
                   </ul>
                 </li>
             </ul>
@@ -173,6 +195,8 @@ export default {
       show: true,
       dropdown: false,
       check: false,
+      time: false,
+      add: false,
        divisions: [],
     }
   },
@@ -185,7 +209,7 @@ export default {
       }
     })
     .then(response => {
-      this.user = response.data;
+      this.user = response.data.user;
 
     })
     .catch(error => {
@@ -206,6 +230,10 @@ export default {
     showUser(division) {
       // console.log(division);
       this.$router.push('/listUser/'+ (division.id));
+    },
+
+    showtimeUser(division) {
+      this.$router.push('/listtimeworkUser/'+ (division.id));
     }
   }
 

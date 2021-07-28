@@ -137,8 +137,12 @@ class AuthController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function userProfile() {
-        // $permission = json_decode(auth()->user()->permission, true);
-        return response()->json(auth()->user(), );
+        $permission = json_decode(auth()->user()->permission, true);
+        // return response()->json(auth()->user(), );
+        return response()->json([
+            'user' => auth()->user(),
+            'permission' => $permission
+        ]);
 
     }
 
@@ -167,7 +171,6 @@ class AuthController extends Controller
         $id = auth()->user()->id;
         $user = User::find($id);
         $avatarName = "";
-        // $random = Str::random(5);
 
         if($request->hasFile('avatar')) {
             $avatar = request()->file('avatar');
@@ -238,6 +241,7 @@ class AuthController extends Controller
 
         $check->user = auth()->user()->fullname;
         $check->id_user = $id;
+        $check->division = auth()->user()->division;
         $check->datecheck = $request->datecheck;
         $check->start_time = $request->start_time;
 
@@ -269,11 +273,20 @@ class AuthController extends Controller
         ]);
     }
 
-    public function showcheck(Request $request) {
+    public function showcheck() {
         $check = checkUser::where('id_user', auth()->user()->id)->get();
 
         return response()->json([
             'check' => $check
+        ]);
+    }
+
+    public function timework() {
+        $timework = checkUser::where('id_user', auth()->user()->id)->orderBy('datecheck', 'desc')->get();
+
+        return response()->json([
+            'message' => 'lấy thành công dữ liệu',
+            'timework' => $timework
         ]);
     }
 

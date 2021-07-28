@@ -5,7 +5,7 @@
               <h4>Thông tin chi tiết nhân viên</h4>
             </div>
             <div class="card-body">
-              <div class="table-responsive col-md-6" style="margin-top:30px">
+              <div class="table-responsive " style="margin-top:30px">
                 <table class="table" >
                    <tbody>
                       <tr>
@@ -43,7 +43,9 @@
                       </tr>
                       <tr>
                         <td>Các quyền </td>
-                        <td>{{ account.permission }}</td>
+                        <td>
+                          <span v-for="per in permissionUser" :key="per" style="text-align:left">- {{permissions[per].name}}. <br></span>
+                        </td>
                       </tr>
                     </tbody>
                 </table>
@@ -69,7 +71,9 @@ export default {
   data() {
     return {
       account: {},
-      divisionName: ''
+      divisionName: '',
+      permissionUser: [],
+      permissions: []
     }
   },
 
@@ -78,7 +82,13 @@ export default {
     .then(response => {
       this.account = response.data.user;
       this.divisionName = response.data.division;
+      this.permissionUser = response.data.permission;
       console.log(this.account.id);
+
+    }),
+
+    axios.get('http://localhost:81/api/permission').then(response => {
+      this.permissions = response.data;
 
     })
 
@@ -115,6 +125,9 @@ table, th, tr, td{
 table{
     border-collapse:collapse;
 
+}
+.table {
+  width: 550px;
 }
 .container {
   color: black;

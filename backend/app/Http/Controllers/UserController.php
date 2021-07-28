@@ -8,6 +8,8 @@ use App\Models\division;
 use App\Models\postion;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\RegisterRequest;
+use App\Models\checkUser;
+use App\Models\permission;
 class UserController extends Controller
 {
     public function listUser($id_division) {
@@ -25,9 +27,11 @@ class UserController extends Controller
     public function profileAccount($idUser) {
         $user = User::find($idUser);
         $division = division::where('id', $user->division)->first()->name;
+        $permission = json_decode($user->permission, true);
         return response()->json([
             'user' => $user,
-            'division' => $division
+            'division' => $division,
+            'permission' => $permission
         ]);
     }
 
@@ -43,6 +47,19 @@ class UserController extends Controller
     public function updateUser(Request $request, $idUser) {
         $user = User::find($idUser);
 
+        $json_permission = "";
+        $array_permission = array();
+
+        if($request->permission != '') {
+            $permission = $request->permission;
+            foreach($permission as $per) {
+                $array_permission[] = $per;
+            }
+            $json_permission = json_encode($array_permission, JSON_FORCE_OBJECT);
+
+        }
+
+
         $user->fullname = $request->fullname;
         $user->email = $request->email;
         $user->address = $request->address;
@@ -53,7 +70,7 @@ class UserController extends Controller
         if($request->position != 0) {
             $user->position = postion::where('id',$request->position)->first()->name;
         }
-        // $user->permission = $request->permission;
+        $user->permission = $json_permission;
         if($request->password != ''){
             $user->password = Hash::make($request->password);
         }
@@ -62,6 +79,55 @@ class UserController extends Controller
 
         return response()->json([
             'message' => 'Cập nhật thành công'
+        ]);
+    }
+
+    public function timeworkUser($id_division) {
+        $divisionName = division::where('id', $id_division)->first()->name;
+
+        // $user = User::where('division', $id_division)->get();
+
+        $listtimedivision = checkUser::where('division', $id_division)->orderBy('datecheck', 'desc')->get();
+
+        return response()->json([
+            'divisionName' => $divisionName,
+            'listtimedivision' => $listtimedivision
+        ]);
+    }
+
+    public function addDivision(Request $request) {
+        $division = new division;
+
+        $division->name = $request->divisionName;
+
+        $division->save();
+
+        return response()->json([
+            'message' => 'Thêm phòng ban thành công'
+        ]);
+    }
+
+    public function addPermission(Request $request) {
+        $permission = new permission;
+
+        $permission->name = $request->permissionName;
+
+        $permission->save();
+
+        return response()->json([
+            'message' => 'Thêm quyền thành công'
+        ]);
+    }
+
+    public function addPosition(Request $request) {
+        $position = new postion;
+
+        $position->name = $request->positionName;
+        $position->id_role = 1;
+        $position->save();
+
+        return response()->json([
+            'message' => 'Thêm mới chức vụ thành công'
         ]);
     }
 }
